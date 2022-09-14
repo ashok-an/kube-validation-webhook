@@ -31,16 +31,6 @@ spec:
             requests:
               cpu: "100m"
               memory: "256Mi"
-          livenessProbe:
-            httpGet:
-              path: /ping
-              port: 5000
-              scheme: HTTPS
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 5000
-              scheme: HTTPS
           ports:
             - containerPort: 5000
 ---

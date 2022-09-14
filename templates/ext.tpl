@@ -8,7 +8,7 @@ countryName                 = IN
 stateOrProvinceName         = KAR
 localityName                = BGL
 organizationName            = ACME INC
-commonName                  = Validation Webhook __WEBHOOK__
+commonName                  = __WEBHOOK__ __VERSION__
 [ req_ext ]
 subjectAltName = @alt_names
 [alt_names]

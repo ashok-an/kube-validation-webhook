@@ -21,7 +21,7 @@ delete:
 	-kubectl delete svc $(webhookName)-svc -n $(ns)
 	-kubectl delete ns $(ns)
 	@echo
-	-kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io $(webhookName)
+	-kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io ngaddons-$(webhookName)
 	@echo
 	-kubectl delete -f manifests/webhook.yaml
 
@@ -63,7 +63,7 @@ certgen:
 	@echo "####################"
 	@echo "## $(@)"
 	@echo "####################"
-	@sed -e "s/__NAMESPACE__/$(ns)/g" -e "s/__WEBHOOK__/$(webhookName)/g" templates/ext.tpl >conf/ext.cnf
+	@sed -e "s/__NAMESPACE__/$(ns)/g" -e "s/__VERSION__/$(version)/g" -e "s/__WEBHOOK__/$(webhookName)/g" templates/ext.tpl >conf/ext.cnf
 	openssl req -x509 -newkey rsa:4096 -nodes -out certs/ca.crt -keyout certs/ca.key -days 365 -config conf/ext.cnf -extensions req_ext
 	ls -l certs/
 
