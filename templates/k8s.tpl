@@ -4,19 +4,28 @@ kind: Namespace
 metadata:
    name: __NAMESPACE__
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: __WEBHOOK__-pod
+  name: __WEBHOOK__-dep
+  namespace: __NAMESPACE__
   labels:
     app: __WEBHOOK__
-  namespace: __NAMESPACE__
 spec:
-  restartPolicy: OnFailure
-  containers:
-    - name: __WEBHOOK__-container
-      image: __TAG__ 
-      imagePullPolicy: Always
+  replicas: 2
+  selector:
+    matchLabels:
+      app: __WEBHOOK__
+  template:
+    metadata:
+      labels:
+        app: __WEBHOOK__
+    spec:
+      containers:
+        - name: __WEBHOOK__-container
+          image: __TAG__
+          ports:
+            - containerPort: 5000
 ---
 apiVersion: v1
 kind: Service

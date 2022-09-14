@@ -17,7 +17,9 @@ delete:
 	@echo "####################"
 	@echo "## $(@)"
 	@echo "####################"
-	-kubectl delete pod $(webhookName) -n $(ns) --force --grace-period=0
+	-kubectl delete deployment $(webhookName)-dep -n $(ns)
+	-kubectl delete svc $(webhookName)-svc -n $(ns)
+	-kubectl delete ns $(ns)
 	@echo
 	-kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io $(webhookName)
 	@echo
