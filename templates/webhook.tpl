@@ -8,6 +8,9 @@ webhooks:
     failurePolicy: Fail
     sideEffects: None
     admissionReviewVersions: ["v1","v1beta1"]
+    namespaceSelector:
+      matchLabels:
+        ngaddons/validation-webhooks: enabled
     rules:
       - apiGroups: ["apps", ""]
         resources:

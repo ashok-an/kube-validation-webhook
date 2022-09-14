@@ -1,9 +1,9 @@
-webhookName := webhook-01
+webhookName := check-labels
 image       := ashoka007/$(webhookName)
 version     := 0.5
 tag         := $(image):$(version)
 
-ns          := admn-ctrl
+ns          := dac-check-labels
 
 all: delete clean certgen yamlgen redeploy
 
