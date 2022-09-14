@@ -1,6 +1,6 @@
 webhookName := check-labels
 image       := ashoka007/$(webhookName)
-version     := 0.5
+version     := 0.6
 tag         := $(image):$(version)
 
 ns          := dac-check-labels
@@ -17,26 +17,20 @@ delete:
 	@echo "####################"
 	@echo "## $(@)"
 	@echo "####################"
-	-kubectl delete deployment $(webhookName)-dep -n $(ns)
-	-kubectl delete svc $(webhookName)-svc -n $(ns)
-	-kubectl delete ns $(ns)
-	@echo
-	-kubectl delete validatingwebhookconfigurations.admissionregistration.k8s.io ngaddons-$(webhookName)
-	@echo
-	-kubectl delete -f manifests/webhook.yaml
+	-kubectl delete -f manifests/
 
 redeploy: build deploy
 
-deploy:
+deploy: yamlgen
 	@echo "####################"
 	@echo "## $(@)"
 	@echo "####################"
-	-kubectl create -f manifests/k8s.yaml
-	@echo
-	-kubectl create -f manifests/webhook.yaml
+	-kubectl create -f manifests/
 	@echo
 	kubectl get validatingwebhookconfigurations.admissionregistration.k8s.io
 	kubectl get pods -n $(ns)
+	kubectl get secret -n $(ns)
+	kubectl get svc -n $(ns)
 
 .PHONY: test clean
 
@@ -71,7 +65,7 @@ yamlgen:
 	@echo "####################"
 	@echo "## $(@)"
 	@echo "####################"
+	@sed -e "s/__KEY__/$(shell cat certs/ca.key | base64 | tr -d '\n')/g" -e "s/__CRT__/$(shell cat certs/ca.crt | base64 | tr -d '\n')/g" -e "s/__WEBHOOK__/$(webhookName)/g" -e "s/__NAMESPACE__/$(ns)/g" -e "s|__TAG__|$(tag)|g" templates/secret.tpl >manifests/secret.yaml
 	@sed -e "s/__NAMESPACE__/$(ns)/g" -e "s|__TAG__|$(tag)|g" -e "s/__WEBHOOK__/$(webhookName)/g" templates/k8s.tpl >manifests/k8s.yaml
-	@nl manifests/k8s.yaml | head
 	@sed -e "s/__NAMESPACE__/$(ns)/g" -e "s/__WEBHOOK__/$(webhookName)/g" -e "s/__CA_BUNDLE__/$(shell cat certs/ca.crt | base64 | tr -d '\n')/g" templates/webhook.tpl >manifests/webhook.yaml
-	nl manifests/webhook.yaml | tail
+	ls -l manifests/

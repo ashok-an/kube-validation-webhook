@@ -1,4 +1,5 @@
 import logging
+import os
 from flask import Flask, jsonify, request
 
 app = Flask('webhook')
@@ -66,4 +67,6 @@ def send_response(allowed, uid, message):
 
 
 if __name__ == "__main__":
-  app.run(ssl_context=('certs/ca.crt', 'certs/ca.key'), port=5000, host='0.0.0.0', debug=True)
+  ca_crt = 'certs/ca.crt' if os.path.isfile('certs/ca.crt') else '/etc/ssl/ca.crt'
+  ca_key = 'certs/ca.key' if os.path.isfile('certs/ca.crt') else '/etc/ssl/ca.key'
+  app.run(ssl_context=(ca_crt, ca_key), port=5000, host='0.0.0.0', debug=True)

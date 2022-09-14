@@ -24,6 +24,10 @@ spec:
       containers:
         - name: __WEBHOOK__-container
           image: __TAG__
+          volumeMounts:
+            - mountPath: /etc/ssl
+              name: __WEBHOOK__-certs
+              readOnly: true
           resources:
             limits:
               cpu: "100m"
@@ -33,6 +37,10 @@ spec:
               memory: "256Mi"
           ports:
             - containerPort: 5000
+      volumes:
+      - name: __WEBHOOK__-certs
+        secret:
+          secretName: __WEBHOOK__-secret
 ---
 apiVersion: v1
 kind: Service
