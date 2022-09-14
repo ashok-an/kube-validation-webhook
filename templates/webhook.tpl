@@ -4,7 +4,7 @@ metadata:
   name: ngaddons-__WEBHOOK__
   namespace: __NAMESPACE__
 webhooks:
-  - name: ngaddons.__WEBHOOK__
+  - name: ngaddons.__WEBHOOK__.webhook
     failurePolicy: Fail
     sideEffects: None
     admissionReviewVersions: ["v1","v1beta1"]
