@@ -32,3 +32,16 @@ spec:
   containers:
   - image: nginx
     name: testpod
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: test-case-incl
+  labels:
+    run: testpod-bypass
+    ngaddons/bypass: "true"
+  name: testpod-bypass
+spec:
+  containers:
+  - image: nginx
+    name: testpod
